@@ -5,14 +5,18 @@ import {
 } from "../db/documentosDb.js";
 
 function registrarEventosDocumento(socket, io) {
-  socket.on("selecionar_documento", async (nomeDocumento, devolverTexto) => {
-    socket.join(nomeDocumento);
+  socket.on(
+    "selecionar_documento",
+    async ({ nomeDocumento, nomeUsuario }, devolverTexto) => {
+      console.log(nomeUsuario);
+      socket.join(nomeDocumento);
 
-    const documento = await encontrarDocumento(nomeDocumento);
-    if (documento) {
-      devolverTexto(documento.texto);
+      const documento = await encontrarDocumento(nomeDocumento);
+      if (documento) {
+        devolverTexto(documento.texto);
+      }
     }
-  });
+  );
 
   socket.on("texto_editor", async ({ texto, nomeDocumento }) => {
     const atualizacao = await atualizaDocumento(nomeDocumento, texto);
